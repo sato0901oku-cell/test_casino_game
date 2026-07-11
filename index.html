@@ -21,7 +21,7 @@
     h1,h2,h3{font-family:Georgia,serif;margin:0;color:var(--gold2)}h1{font-size:clamp(28px,5vw,52px)}h2{font-size:clamp(23px,4vw,36px)}p{line-height:1.65}.lead{color:var(--muted);max-width:620px}
     .games{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:24px}.game-card{border:1px solid #705334;background:linear-gradient(145deg,#261923,#100c13);border-radius:15px;padding:20px;text-align:left;color:var(--ink);min-height:190px;transition:.15s}.game-card:hover{transform:translateY(-3px);border-color:var(--gold)}.game-card strong{display:block;font:26px Georgia;color:var(--gold2);margin:8px 0}.game-card .mark{font-size:42px}.game-card p{font-size:13px;color:var(--muted);margin:0}
     aside{background-image:linear-gradient(to top,#1b131d 0 30%,#120c1480 58%,transparent 86%),url("assets/dark-casino-dealer.png");background-size:auto 100%;background-position:68% center;border:1px solid #715235;border-radius:18px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:flex-end;min-height:0}.dealer-name{font:20px Georgia;color:var(--gold2);text-shadow:0 2px 5px #000}.speech{background:#2b1d2be8;border:1px solid #715238;border-radius:13px;padding:12px 14px;color:#f4e8dc;font-size:13px;line-height:1.55;position:relative}.speech:after{content:"";position:absolute;right:25px;bottom:-10px;border:10px solid transparent;border-top-color:#715238;border-bottom:0}.aside-tip{color:var(--muted);font-size:11px;margin-top:22px;text-shadow:0 1px 4px #000}
-    .topline{display:flex;gap:10px;align-items:center;margin-bottom:18px}.back{border:1px solid #665036;background:#151018;color:var(--ink);border-radius:9px;padding:9px 13px}.topline .title{margin-left:4px}.rule{margin-left:auto;color:var(--muted);font-size:12px}
+    .topline{display:flex;gap:10px;align-items:center;margin-bottom:18px}.back{border:1px solid #665036;background:#151018;color:var(--ink);border-radius:9px;padding:9px 13px}.topline .title{margin-left:4px}.rule{margin-left:auto;color:var(--muted);font-size:12px}.mobile-dealer{display:none}
     .bet-box{display:flex;align-items:center;flex-wrap:wrap;gap:7px;background:#0c090e;border:1px solid #493725;border-radius:11px;padding:10px;margin-bottom:16px}.bet-box>span{color:var(--muted);font-size:12px;margin-right:4px}.chip{width:52px;height:38px;border-radius:999px;border:2px dashed #f2d083;background:#692036;color:#fff;font-weight:800}.chip.active{box-shadow:0 0 0 3px #e6bd64,0 0 18px #d9af6255;background:#9d2444}.chip[data-bet="100"],.chip[data-bj-add="100"]{background:#222}.chip[data-bet="250"],.chip[data-bj-add="250"]{background:#35512f}.chip[data-bet="500"],.chip[data-bj-add="500"]{background:#795b18}
     .table{background:radial-gradient(circle at 50% 35%,#176348,#0b3428 67%,#071e19);border:8px solid #3d271b;outline:2px solid #9a7140;border-radius:60px;padding:22px;min-height:330px;box-shadow:inset 0 0 45px #0009}
     .hand-label{font-size:12px;color:#d9cfbf;text-align:center;margin:4px}.cards-row{display:flex;justify-content:center;min-height:105px;gap:7px;align-items:center;flex-wrap:wrap}.card{width:62px;height:88px;background:#f6f0e5;color:#171217;border-radius:8px;border:1px solid #fff;box-shadow:0 4px 10px #0007;padding:6px;font:bold 18px Georgia;position:relative;transform-origin:center}.card.deal{animation:dealCard .38s cubic-bezier(.16,.8,.25,1) both}.card.red{color:#9d1731}.card.back-card{background:repeating-linear-gradient(45deg,#611d36 0 8px,#d3ad61 8px 10px);border:5px solid #eee}.card .suit{position:absolute;right:6px;bottom:5px;font-size:24px}.score{text-align:center;color:var(--gold2);min-height:22px;font-weight:700}
@@ -48,6 +48,35 @@
       .panel{height:100%;min-height:0;border-radius:14px;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
       .screen{min-height:auto;padding-bottom:34px}
       .topline{position:sticky;top:0;z-index:5;background:linear-gradient(#211823 80%,transparent);padding:2px 0 12px}
+      .topline .mobile-dealer{display:block;width:64px;height:58px;flex:0 0 64px;margin:-2px 0 0 auto;border:1px solid #80603d;border-radius:12px;background-image:url("assets/dark-casino-dealer.png");background-size:auto 132px;background-position:70% 14%;background-repeat:no-repeat;box-shadow:inset 0 -18px 24px #160f18aa,0 4px 12px #0008}
+    }
+    @media(max-width:480px) and (orientation:portrait){
+      #blackjack.active{height:100%;min-height:0;display:grid;grid-template-rows:auto auto minmax(230px,1fr) auto auto;gap:7px;padding-bottom:10px;overflow:hidden}
+      #blackjack .topline{position:relative;top:auto;margin:0;padding:0 0 5px}
+      #blackjack .bet-box{display:grid;grid-template-columns:76px repeat(4,minmax(0,1fr));gap:5px;margin:0;padding:7px}
+      #blackjack .bet-box>span:first-child{margin:0;text-align:center;white-space:nowrap}
+      #blackjack .chip{width:100%;height:35px;padding:0;font-size:14px}
+      #blackjack #clearBjBetBtn{grid-column:1/3;min-height:34px;padding:5px 8px}
+      #blackjack .bj-bet-total{grid-column:3/6;margin:0;padding-right:4px;text-align:right;white-space:nowrap}
+      #blackjack .bj-bet-total b{font-size:17px}
+      #blackjack .table{height:100%;min-height:230px;display:grid;grid-template-rows:auto minmax(60px,1fr) auto auto minmax(60px,1fr) auto;border-width:5px;border-radius:24px;padding:7px 9px;overflow:hidden}
+      #blackjack .hand-label{margin:0;font-size:10px}
+      #blackjack .cards-row{min-height:60px;gap:4px;flex-wrap:nowrap;overflow:hidden}
+      #blackjack .card{width:48px;height:68px;flex:0 1 48px;padding:4px;font-size:14px;border-radius:6px}
+      #blackjack .cards-row .card+.card{margin-left:-7px}
+      #blackjack .card .suit{right:4px;bottom:3px;font-size:19px}
+      #blackjack .score{min-height:17px;font-size:12px;line-height:17px}
+      #blackjack .message{min-height:22px;margin:0;font-size:11px;line-height:1.35;overflow:hidden}
+      #blackjack .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"hit stand" "deal double";gap:5px;margin:0}
+      #blackjack .actions button{min-height:38px;padding:6px 8px;font-size:13px}
+      #blackjack #dealBtn{grid-area:deal}#blackjack #hitBtn{grid-area:hit}#blackjack #standBtn{grid-area:stand}#blackjack #doubleBtn{grid-area:double}
+    }
+    @media(max-width:480px) and (orientation:portrait) and (max-height:640px){
+      #blackjack.active{grid-template-rows:auto auto minmax(205px,1fr) auto auto;gap:5px}
+      #blackjack .topline .mobile-dealer{width:54px;height:48px;flex-basis:54px;background-size:auto 112px}
+      #blackjack .bet-box{padding:5px}#blackjack .chip{height:32px}#blackjack #clearBjBetBtn{min-height:31px}
+      #blackjack .table{min-height:205px}#blackjack .card{height:60px}#blackjack .cards-row{min-height:54px}
+      #blackjack .actions button{min-height:34px;padding:4px 7px}
     }
     @media(max-width:430px){.screen{padding:14px 14px 34px}.games{margin-top:14px}.outside-bets{grid-template-columns:repeat(2,1fr)}.number-grid{grid-template-columns:repeat(6,minmax(34px,1fr))}.bet-box{justify-content:center}.chip{width:48px}.topline{align-items:flex-start}.topline h2{font-size:23px}.wheel-stage{width:min(320px,86vw)}.slot-machine{padding:10px}.reel-window{height:180px}}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}.game-card:hover{transform:none}}
@@ -76,7 +105,7 @@
         </div>
 
         <div class="screen" id="blackjack">
-          <div class="topline"><button class="back">← ロビー</button><h2 class="title">Blackjack</h2><span class="rule">BJ配当 3:2 / ディーラー17以上</span></div>
+          <div class="topline"><button class="back">← ロビー</button><h2 class="title">Blackjack</h2><span class="mobile-dealer" aria-hidden="true"></span><span class="rule">BJ配当 3:2 / ディーラー17以上</span></div>
           <div class="bet-box" id="bjBetBox"><span>チップを追加</span><button class="chip add-chip" data-bj-add="50">50</button><button class="chip add-chip" data-bj-add="100">100</button><button class="chip add-chip" data-bj-add="250">250</button><button class="chip add-chip" data-bj-add="500">500</button><button class="secondary" id="clearBjBetBtn">クリア</button><span class="bj-bet-total">合計BET <b id="bjBetTotal">0</b></span></div>
           <div class="table">
             <div class="hand-label">DEALER</div><div class="cards-row" id="dealerCards"></div><div class="score" id="dealerScore"></div>
@@ -87,7 +116,7 @@
         </div>
 
         <div class="screen" id="roulette">
-          <div class="topline"><button class="back">← ロビー</button><h2 class="title">Roulette</h2><span class="rule">ヨーロピアン 0–36</span></div>
+          <div class="topline"><button class="back">← ロビー</button><h2 class="title">Roulette</h2><span class="mobile-dealer" aria-hidden="true"></span><span class="rule">ヨーロピアン 0–36</span></div>
           <div class="bet-box" data-bet-group><span>BET</span><button class="chip active" data-bet="50">50</button><button class="chip" data-bet="100">100</button><button class="chip" data-bet="250">250</button><button class="chip" data-bet="500">500</button></div>
           <div class="roulette-layout">
             <div class="wheel-wrap"><div class="wheel-stage"><div class="pointer">▼</div><canvas class="wheel-canvas" id="wheelCanvas" width="760" height="760" aria-label="数字付きヨーロピアンルーレット"></canvas><div class="wheel-center">♛</div></div><div class="ball-result" id="rouletteResult">—</div></div>
@@ -107,7 +136,7 @@
         </div>
 
         <div class="screen" id="slots">
-          <div class="topline"><button class="back">← ロビー</button><h2 class="title">Slots</h2><span class="rule">3 REELS / EQUAL ODDS</span></div>
+          <div class="topline"><button class="back">← ロビー</button><h2 class="title">Slots</h2><span class="mobile-dealer" aria-hidden="true"></span><span class="rule">3 REELS / EQUAL ODDS</span></div>
           <div class="bet-box" data-bet-group><span>BET</span><button class="chip active" data-bet="50">50</button><button class="chip" data-bet="100">100</button><button class="chip" data-bet="250">250</button><button class="chip" data-bet="500">500</button></div>
           <div class="slot-layout">
             <div>
@@ -151,7 +180,7 @@
     const speech=$("#speech"), chipsEl=$("#chips");
     const dealerPanel=$("#dealerPanel"),dealerImages={neutral:"assets/dark-casino-dealer.png",win:"assets/dark-casino-dealer-win.png",lose:"assets/dark-casino-dealer-lose.png"};
     Object.values(dealerImages).forEach(src=>{const img=new Image();img.src=src});
-    function dealerMood(mode="neutral"){const src=dealerImages[mode]||dealerImages.neutral;dealerPanel.style.backgroundImage=`linear-gradient(to top,#1b131d 0 30%,#120c1480 58%,transparent 86%),url("${src}")`}
+    function dealerMood(mode="neutral"){const src=dealerImages[mode]||dealerImages.neutral;dealerPanel.style.backgroundImage=`linear-gradient(to top,#1b131d 0 30%,#120c1480 58%,transparent 86%),url("${src}")`;$$('.mobile-dealer').forEach(el=>el.style.backgroundImage=`url("${src}")`)}
     function say(text,mode){speech.textContent=text;if(mode)dealerMood(mode)}
     function roundChips(value){return Math.floor(value/10)*10}
     function updateHud(){chipsEl.textContent=roundChips(game.chips).toLocaleString("ja-JP")}
@@ -244,9 +273,15 @@
       [0,1,0],[2,1,2],
       [1,0,1],[1,2,1]
     ];
+    // 実機に近いリール帯。各帯は5絵柄を5個ずつ持ち、停止位置の前後を含む3段を表示する。
+    const reelStrips=[
+      [0,3,1,4,2, 1,0,2,4,3, 2,1,3,0,4, 3,2,4,1,0, 4,3,0,2,1],
+      [2,0,4,1,3, 4,2,1,3,0, 1,4,3,0,2, 3,1,0,2,4, 0,3,2,4,1],
+      [4,1,3,2,0, 3,4,2,0,1, 2,3,0,1,4, 1,2,4,0,3, 0,1,4,3,2]
+    ];
     const lineColors=["#ffe08a","#61e6ff","#ff7196","#9eff80","#c893ff","#ff9f5a","#66a3ff","#f6ff69","#ff72e8"];
     let slotSpinning=false;
-    function randomSlotColumn(){return [randomInt(slotSymbols.length),randomInt(slotSymbols.length),randomInt(slotSymbols.length)]}
+    function reelView(column,stop){const strip=reelStrips[column],n=strip.length;return [strip[(stop-1+n)%n],strip[stop],strip[(stop+1)%n]]}
     function showSlotColumn(column,values){for(let row=0;row<3;row++)$("#slot-"+row+"-"+column).innerHTML=slotSymbols[values[row]].html}
     function clearSlotWins(){$$('.slot-cell').forEach(c=>c.classList.remove("win"));$("#paylineOverlay").innerHTML=""}
     function showWinningLines(wins){
@@ -256,10 +291,10 @@
     function spinSlots(){
       if(slotSpinning||game.ended)return;
       if(game.chips<game.bet){$("#slotMessage").textContent="そのBETに必要なチップが足りません。";say("BETを下げてください。","lose");tone(140,.2,"sawtooth",.1);return}
-      const wager=game.bet,finals=Array.from({length:3},()=>randomSlotColumn()),stopped=[false,false,false];
+      const wager=game.bet,stops=reelStrips.map(strip=>randomInt(strip.length)),columns=stops.map((stop,col)=>reelView(col,stop)),finals=Array.from({length:3},(_,row)=>columns.map(column=>column[row])),stopped=[false,false,false],animationStops=reelStrips.map(strip=>randomInt(strip.length));
       clearSlotWins();game.chips-=wager;updateHud();slotSpinning=true;dealerMood("neutral");$("#slotSpinBtn").disabled=true;$("#slotMessage").textContent="9ライン抽選中…";$$('.reel-column').forEach(r=>r.classList.add("spinning"));
-      const ticker=setInterval(()=>{for(let col=0;col<3;col++)if(!stopped[col])showSlotColumn(col,randomSlotColumn());tone(240+randomInt(90),.025,"square",.025)},80);
-      for(let col=0;col<3;col++)setTimeout(()=>{stopped[col]=true;showSlotColumn(col,[finals[0][col],finals[1][col],finals[2][col]]);$("#reel"+col).classList.remove("spinning");tone(430+col*100,.13,"triangle",.11)},850+col*350);
+      const ticker=setInterval(()=>{for(let col=0;col<3;col++)if(!stopped[col]){animationStops[col]=(animationStops[col]+1)%reelStrips[col].length;showSlotColumn(col,reelView(col,animationStops[col]))}tone(240+randomInt(90),.025,"square",.025)},80);
+      for(let col=0;col<3;col++)setTimeout(()=>{stopped[col]=true;showSlotColumn(col,columns[col]);$("#reel"+col).classList.remove("spinning");tone(430+col*100,.13,"triangle",.11)},850+col*350);
       setTimeout(()=>{
         clearInterval(ticker);const wins=[];
         slotLines.forEach((rows,line)=>{const values=rows.map((row,col)=>finals[row][col]);if(values[0]===values[1]&&values[1]===values[2])wins.push({line,symbol:values[0],mult:slotSymbols[values[0]].pay})});
