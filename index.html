@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Nocturne Casino</title>
+  <style>
+    :root{--bg:#100c12;--panel:rgba(29,21,31,.87);--line:#80603d;--gold:#d9af62;--gold2:#ffe3a0;--red:#8f1830;--ink:#fff8ef;--muted:#c9baac;--green:#195943;--shadow:0 24px 70px #0009}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+    body{min-height:100dvh;display:grid;place-items:center;background-image:linear-gradient(90deg,rgba(14,8,14,.10),rgba(10,6,12,.40)),url("assets/dark-casino-dealer.png");background-size:cover;background-position:center;overflow:hidden}
+    button,input{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.42}
+    button:focus-visible,input:focus-visible{outline:3px solid #fff;outline-offset:2px}
+    .app{width:min(100vw,177.7778dvh);height:min(100dvh,56.25vw);aspect-ratio:16/9;min-height:0;display:flex;flex-direction:column;padding:calc(12px + env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left));gap:12px;overflow:hidden;background:#0b080db8}
+    header{display:flex;align-items:center;gap:12px;max-width:1160px;width:100%;margin:auto auto 0;background:#211724dc;border:1px solid #6a4d31;border-radius:14px;padding:10px 14px;backdrop-filter:blur(10px);box-shadow:var(--shadow)}
+    .brand{font-family:Georgia,serif;font-size:clamp(18px,3vw,27px);color:var(--gold2);letter-spacing:.08em;white-space:nowrap}.brand small{display:block;font:10px system-ui;color:var(--muted);letter-spacing:.24em}
+    .meters{margin-left:auto;display:flex;gap:8px;align-items:center}.meter{background:#08070a;border:1px solid #493725;border-radius:10px;padding:7px 11px;min-width:96px;text-align:center}.meter span{display:block;color:var(--muted);font-size:10px}.meter b{font-size:18px;color:var(--gold2);font-variant-numeric:tabular-nums}
+    .icon-btn{border:1px solid #5e472f;background:#17111a;color:var(--ink);border-radius:9px;min-width:42px;min-height:42px}
+    main{flex:1;width:100%;max-width:1160px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:12px;min-height:0}
+    .panel{background:var(--panel);border:1px solid #60462d;border-radius:18px;box-shadow:var(--shadow);backdrop-filter:blur(12px);overflow:auto;min-height:520px}
+    .screen{display:none;padding:clamp(16px,3vw,30px);min-height:100%}.screen.active{display:block}
+    h1,h2,h3{font-family:Georgia,serif;margin:0;color:var(--gold2)}h1{font-size:clamp(28px,5vw,52px)}h2{font-size:clamp(23px,4vw,36px)}p{line-height:1.65}.lead{color:var(--muted);max-width:620px}
+    .games{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:24px}.game-card{border:1px solid #705334;background:linear-gradient(145deg,#261923,#100c13);border-radius:15px;padding:20px;text-align:left;color:var(--ink);min-height:190px;transition:.15s}.game-card:hover{transform:translateY(-3px);border-color:var(--gold)}.game-card strong{display:block;font:26px Georgia;color:var(--gold2);margin:8px 0}.game-card .mark{font-size:42px}.game-card p{font-size:13px;color:var(--muted);margin:0}
+    aside{background-image:linear-gradient(to top,#1b131d 0 30%,#120c1480 58%,transparent 86%),url("assets/dark-casino-dealer.png");background-size:auto 100%;background-position:68% center;border:1px solid #715235;border-radius:18px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:flex-end;min-height:0}.dealer-name{font:20px Georgia;color:var(--gold2);text-shadow:0 2px 5px #000}.speech{background:#2b1d2be8;border:1px solid #715238;border-radius:13px;padding:12px 14px;color:#f4e8dc;font-size:13px;line-height:1.55;position:relative}.speech:after{content:"";position:absolute;right:25px;bottom:-10px;border:10px solid transparent;border-top-color:#715238;border-bottom:0}.aside-tip{color:var(--muted);font-size:11px;margin-top:22px;text-shadow:0 1px 4px #000}
+    .topline{display:flex;gap:10px;align-items:center;margin-bottom:18px}.back{border:1px solid #665036;background:#151018;color:var(--ink);border-radius:9px;padding:9px 13px}.topline .title{margin-left:4px}.rule{margin-left:auto;color:var(--muted);font-size:12px}
+    .bet-box{display:flex;align-items:center;flex-wrap:wrap;gap:7px;background:#0c090e;border:1px solid #493725;border-radius:11px;padding:10px;margin-bottom:16px}.bet-box>span{color:var(--muted);font-size:12px;margin-right:4px}.chip{width:52px;height:38px;border-radius:999px;border:2px dashed #f2d083;background:#692036;color:#fff;font-weight:800}.chip.active{box-shadow:0 0 0 3px #e6bd64,0 0 18px #d9af6255;background:#9d2444}.chip[data-bet="100"],.chip[data-bj-add="100"]{background:#222}.chip[data-bet="250"],.chip[data-bj-add="250"]{background:#35512f}.chip[data-bet="500"],.chip[data-bj-add="500"]{background:#795b18}
+    .table{background:radial-gradient(circle at 50% 35%,#176348,#0b3428 67%,#071e19);border:8px solid #3d271b;outline:2px solid #9a7140;border-radius:60px;padding:22px;min-height:330px;box-shadow:inset 0 0 45px #0009}
+    .hand-label{font-size:12px;color:#d9cfbf;text-align:center;margin:4px}.cards-row{display:flex;justify-content:center;min-height:105px;gap:7px;align-items:center;flex-wrap:wrap}.card{width:62px;height:88px;background:#f6f0e5;color:#171217;border-radius:8px;border:1px solid #fff;box-shadow:0 4px 10px #0007;padding:6px;font:bold 18px Georgia;position:relative;transform-origin:center}.card.deal{animation:dealCard .38s cubic-bezier(.16,.8,.25,1) both}.card.red{color:#9d1731}.card.back-card{background:repeating-linear-gradient(45deg,#611d36 0 8px,#d3ad61 8px 10px);border:5px solid #eee}.card .suit{position:absolute;right:6px;bottom:5px;font-size:24px}.score{text-align:center;color:var(--gold2);min-height:22px;font-weight:700}
+    @keyframes dealCard{0%{opacity:0;transform:translate(90px,-90px) rotate(16deg) scale(.75)}70%{opacity:1;transform:translate(-4px,3px) rotate(-2deg) scale(1.03)}100%{opacity:1;transform:none}}
+    .bj-bet-total{margin-left:auto;color:var(--muted);font-size:12px}.bj-bet-total b{color:var(--gold2);font-size:19px;margin-left:5px}.chip.add-chip:active{transform:scale(.92)}
+    .actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:16px}.primary,.secondary,.danger{border-radius:10px;padding:11px 18px;min-height:44px;font-weight:800}.primary{border:0;background:linear-gradient(#f3d48b,#ba883c);color:#231508}.secondary{border:1px solid #8a6a42;background:#171018;color:var(--ink)}.danger{border:1px solid #b23d55;background:#5c1527;color:#fff}
+    .message{text-align:center;min-height:28px;margin:12px 0 0;color:#f8dda1;font-weight:700}
+    .roulette-layout{display:grid;grid-template-columns:390px minmax(0,1fr);gap:24px;align-items:center}.wheel-wrap{display:grid;place-items:center}.wheel-stage{width:370px;max-width:100%;aspect-ratio:1;position:relative;display:grid;place-items:center}.wheel-canvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0 18px 24px #000b);transition:transform 2.8s cubic-bezier(.12,.65,.14,1)}.wheel-center{position:absolute;inset:36%;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#4b3322,#130e13 65%);border:6px solid #c79c59;color:var(--gold2);font-size:42px;box-shadow:0 5px 20px #000;pointer-events:none}.pointer{position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:38px;color:var(--gold2);z-index:2;filter:drop-shadow(0 3px 2px #000)}.ball-result{font:34px Georgia;color:var(--gold2);text-align:center;margin-top:10px;min-height:42px}
+    .roulette-bets{display:grid;gap:10px}.outside-bets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.bet-option,.number-cell{position:relative;border:1px solid #644b34;background:#171018;color:var(--ink);border-radius:9px;padding:10px;min-height:44px}.bet-option:hover,.number-cell:hover{border-color:var(--gold)}.bet-option.has-bet,.number-cell.has-bet{border-color:var(--gold2);box-shadow:inset 0 0 0 1px var(--gold),0 0 12px #d9af6233}.bet-amount{position:absolute;right:4px;top:3px;min-width:22px;border-radius:999px;padding:2px 5px;background:#e0b968;color:#201308;font-size:10px;font-weight:900}.number-grid{display:grid;grid-template-columns:repeat(6,minmax(38px,1fr));gap:5px}.number-cell{font-weight:800;padding:9px 4px}.number-cell.red{background:#72172c}.number-cell.black{background:#111116}.number-cell.green{background:#176044;grid-column:1/-1}.bet-summary{display:flex;justify-content:space-between;align-items:center;background:#0b090d;border:1px solid #493725;border-radius:9px;padding:8px 10px;font-size:12px}.bet-summary b{color:var(--gold2);font-size:16px}
+    .slot-layout{display:grid;grid-template-columns:minmax(380px,1fr) 250px;gap:20px;align-items:center}.slot-machine{background:linear-gradient(145deg,#4b1829,#160d16 68%);border:8px solid #9b7340;outline:2px solid #f1ce84;border-radius:28px;padding:18px;box-shadow:inset 0 0 36px #000b,0 20px 36px #0008}.slot-title{text-align:center;color:var(--gold2);font:700 18px Georgia;letter-spacing:.22em;margin-bottom:12px}.reels{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:9px;background:#0a080b;padding:10px;border-radius:15px;border:2px solid #4e3928}.reel-window{height:240px;overflow:hidden;border-radius:10px;border:3px solid #d9af62;background:linear-gradient(#fff5df,#d8c6aa);box-shadow:inset 0 9px 18px #0003}.reel-column{height:100%;display:grid;grid-template-rows:repeat(3,1fr);transition:filter .12s,transform .12s}.reel-column.spinning{filter:blur(3px);transform:scaleY(1.05)}.slot-cell{display:grid;place-items:center;min-height:0;font:900 clamp(25px,4vw,46px) Georgia;color:#201319;text-shadow:0 2px #fff;border-bottom:1px solid #8c775966;position:relative}.slot-cell:last-child{border-bottom:0}.slot-cell .bar{font-size:.58em;letter-spacing:-.06em}.slot-cell.win{z-index:2;animation:cellWin .55s ease-in-out infinite alternate;box-shadow:inset 0 0 0 4px #ffe49b,inset 0 0 25px #ffd15c;background:#fff4bf}.payline-overlay{position:absolute;inset:10px;z-index:3;width:calc(100% - 20px);height:calc(100% - 20px);pointer-events:none;overflow:visible}.payline-overlay polyline{fill:none;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 5px #000);animation:lineWin .6s ease-in-out infinite alternate}.slot-paytable{background:#0d090e;border:1px solid #60472e;border-radius:13px;padding:14px}.slot-paytable h3{font-size:18px;margin-bottom:10px}.pay-row{display:flex;justify-content:space-between;padding:7px 3px;border-bottom:1px solid #3a2a25;font-size:13px}.pay-row:last-child{border:0}.pay-row b{color:var(--gold2)}.slot-note{color:var(--muted);font-size:11px;margin-top:10px;line-height:1.5}
+    @keyframes cellWin{from{filter:brightness(1)}to{filter:brightness(1.3)}}@keyframes lineWin{from{opacity:.55}to{opacity:1}}
+    .overlay{position:fixed;inset:0;background:#060408e8;display:none;place-items:center;padding:18px;z-index:10;backdrop-filter:blur(8px)}.overlay.show{display:grid}.modal{width:min(560px,100%);background:#171018;border:1px solid #8b6841;border-radius:18px;padding:26px;box-shadow:var(--shadow);text-align:center}.modal .emblem{font-size:50px}.summary{font-size:28px;color:var(--gold2);font-family:Georgia}.fine{font-size:11px;color:var(--muted)}
+    @media(max-width:900px){.roulette-layout{grid-template-columns:1fr}.wheel-stage{width:min(350px,82vw)}}
+    @media(max-width:900px){.slot-layout{grid-template-columns:1fr}.slot-paytable{display:grid;grid-template-columns:repeat(2,1fr);gap:0 12px}.slot-paytable h3,.slot-note{grid-column:1/-1}}
+    @media(max-width:820px){body{background-position:68% center}.app{background:#100b124f}main{grid-template-columns:1fr}.panel{min-height:0}.panel{overflow:auto}aside{display:none}.games{grid-template-columns:1fr}.game-card{min-height:145px}header{flex-wrap:nowrap}.brand{width:auto}.meters{margin-left:auto;flex:0}.meter{min-width:82px;padding:5px 8px}.rule{display:none}.table{border-radius:30px;padding:14px}.card{width:52px;height:75px;font-size:16px}.cards-row{min-height:88px}}
+    @media(max-width:430px){.screen{padding:14px}.games{margin-top:14px}.outside-bets{grid-template-columns:repeat(2,1fr)}.number-grid{grid-template-columns:repeat(6,minmax(34px,1fr))}.bet-box{justify-content:center}.chip{width:48px}.topline{align-items:flex-start}.topline h2{font-size:23px}.wheel-stage{width:min(320px,86vw)}.slot-machine{padding:10px}.reel-window{height:180px}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}.game-card:hover{transform:none}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">NOCTURNE CASINO<small>PRIVATE TABLE</small></div>
+      <div class="meters">
+        <div class="meter"><span>CHIPS</span><b id="chips">1,000</b></div>
+      </div>
+      <button class="icon-btn" id="soundBtn" aria-label="サウンド切替" title="サウンド切替">♪</button>
+    </header>
+
+    <main>
+      <section class="panel">
+        <div class="screen active" id="lobby">
+          <h1>さぁ、戯れましょう。</h1>
+          <p class="lead">時間を気にせず楽しめるプライベートゲーム。ブラックジャックとルーレットを行き来し、1,000枚のチップをどこまで増やせるか挑戦しましょう。</p>
+          <div class="games">
+            <button class="game-card" data-open="blackjack"><span class="mark">♠</span><strong>BLACKJACK</strong><p>21を目指す、すぐに遊べるカードゲーム。ディーラーは17以上でスタンドします。</p></button>
+            <button class="game-card" data-open="roulette"><span class="mark">◉</span><strong>ROULETTE</strong><p>赤・黒、奇数・偶数、数字を選ぶヨーロピアンルーレット。</p></button>
+            <button class="game-card" data-open="slots"><span class="mark">7</span><strong>SLOTS</strong><p>3つのリールを回し、同じ絵柄を揃えるクラシックスロット。</p></button>
+          </div>
+        </div>
+
+        <div class="screen" id="blackjack">
+          <div class="topline"><button class="back">← ロビー</button><h2 class="title">Blackjack</h2><span class="rule">BJ配当 3:2 / ディーラー17以上</span></div>
+          <div class="bet-box" id="bjBetBox"><span>チップを追加</span><button class="chip add-chip" data-bj-add="50">50</button><button class="chip add-chip" data-bj-add="100">100</button><button class="chip add-chip" data-bj-add="250">250</button><button class="chip add-chip" data-bj-add="500">500</button><button class="secondary" id="clearBjBetBtn">クリア</button><span class="bj-bet-total">合計BET <b id="bjBetTotal">0</b></span></div>
+          <div class="table">
+            <div class="hand-label">DEALER</div><div class="cards-row" id="dealerCards"></div><div class="score" id="dealerScore"></div>
+            <div class="hand-label">PLAYER</div><div class="cards-row" id="playerCards"></div><div class="score" id="playerScore"></div>
+          </div>
+          <div class="message" id="bjMessage" aria-live="polite">チップを重ねてBETを作り、「カードを配る」を押してください。</div>
+          <div class="actions"><button class="primary" id="dealBtn">カードを配る</button><button class="secondary" id="hitBtn" disabled>ヒット</button><button class="secondary" id="standBtn" disabled>スタンド</button><button class="danger" id="doubleBtn" disabled>ダブルダウン</button></div>
+        </div>
+
+        <div class="screen" id="roulette">
+          <div class="topline"><button class="back">← ロビー</button><h2 class="title">Roulette</h2><span class="rule">ヨーロピアン 0–36</span></div>
+          <div class="bet-box" data-bet-group><span>BET</span><button class="chip active" data-bet="50">50</button><button class="chip" data-bet="100">100</button><button class="chip" data-bet="250">250</button><button class="chip" data-bet="500">500</button></div>
+          <div class="roulette-layout">
+            <div class="wheel-wrap"><div class="wheel-stage"><div class="pointer">▼</div><canvas class="wheel-canvas" id="wheelCanvas" width="760" height="760" aria-label="数字付きヨーロピアンルーレット"></canvas><div class="wheel-center">♛</div></div><div class="ball-result" id="rouletteResult">—</div></div>
+            <div>
+              <div class="roulette-bets" id="rouletteBets">
+                <div class="outside-bets">
+                  <button class="bet-option" data-bet-key="red">赤 ×2</button><button class="bet-option" data-bet-key="black">黒 ×2</button><button class="bet-option" data-bet-key="odd">奇数 ×2</button>
+                  <button class="bet-option" data-bet-key="even">偶数 ×2</button><button class="bet-option" data-bet-key="low">1–18 ×2</button><button class="bet-option" data-bet-key="high">19–36 ×2</button>
+                </div>
+                <div class="number-grid" id="numberGrid" aria-label="数字へのBET"></div>
+                <div class="bet-summary"><span>合計BET <b id="rouletteTotal">0</b></span><button class="secondary" id="clearBetsBtn">BETをクリア</button></div>
+              </div>
+              <div class="message" id="rouletteMessage" aria-live="polite">チップ額を選び、複数の賭け先を追加できます。</div>
+              <div class="actions"><button class="primary" id="spinBtn">ホイールを回す</button></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="screen" id="slots">
+          <div class="topline"><button class="back">← ロビー</button><h2 class="title">Slots</h2><span class="rule">3 REELS / EQUAL ODDS</span></div>
+          <div class="bet-box" data-bet-group><span>BET</span><button class="chip active" data-bet="50">50</button><button class="chip" data-bet="100">100</button><button class="chip" data-bet="250">250</button><button class="chip" data-bet="500">500</button></div>
+          <div class="slot-layout">
+            <div>
+              <div class="slot-machine">
+                <div class="slot-title">NOCTURNE TRIPLE</div>
+                <div class="reels">
+                  <div class="reel-window"><div class="reel-column" id="reel0"><div class="slot-cell" id="slot-0-0">7</div><div class="slot-cell" id="slot-1-0"><span class="bar">BAR</span></div><div class="slot-cell" id="slot-2-0">♦</div></div></div>
+                  <div class="reel-window"><div class="reel-column" id="reel1"><div class="slot-cell" id="slot-0-1">🔔</div><div class="slot-cell" id="slot-1-1">🍒</div><div class="slot-cell" id="slot-2-1">7</div></div></div>
+                  <div class="reel-window"><div class="reel-column" id="reel2"><div class="slot-cell" id="slot-0-2">♦</div><div class="slot-cell" id="slot-1-2">🔔</div><div class="slot-cell" id="slot-2-2">🍒</div></div></div>
+                  <svg class="payline-overlay" id="paylineOverlay" viewBox="0 0 300 300" preserveAspectRatio="none" aria-hidden="true"></svg>
+                </div>
+              </div>
+              <div class="message" id="slotMessage" aria-live="polite">BETを選び、リールを回してください。</div>
+              <div class="actions"><button class="primary" id="slotSpinBtn">リールを回す</button></div>
+            </div>
+            <div class="slot-paytable">
+              <h3>配当表</h3>
+              <div class="pay-row"><span>7　7　7</span><b>×6</b></div>
+              <div class="pay-row"><span>BAR BAR BAR</span><b>×3</b></div>
+              <div class="pay-row"><span>♦　♦　♦</span><b>×2</b></div>
+              <div class="pay-row"><span>🔔　🔔　🔔</span><b>×1.5</b></div>
+              <div class="pay-row"><span>🍒　🍒　🍒</span><b>×1</b></div>
+              <div class="slot-note">全9ラインが常時有効です。複数ラインの配当は合算され、1の位を切り捨てて返却されます。</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside id="dealerPanel"><div class="dealer-name">黒羽 レイナ</div><div class="speech" id="speech">ようこそ、私のテーブルへ。準備ができたらゲームを始めましょう。</div><div class="aside-tip">仮想チップのみを使用する、ローカル専用ゲームです。セーブ機能はありません。</div></aside>
+    </main>
+  </div>
+
+  <div class="overlay show" id="startOverlay"><div class="modal"><div class="emblem">♠ ◆ ♣</div><h2>Nocturne Casino</h2><p>お好きなペースでお楽しみください。</p><button class="primary" id="startBtn">ゲームを開始</button><p class="fine">音が出ます。右上の♪からいつでも停止できます。</p></div></div>
+  <div class="overlay" id="endOverlay"><div class="modal"><div class="emblem">♛</div><h2>TABLE CLOSED</h2><p class="summary" id="finalScore"></p><p id="finalMessage"></p><button class="primary" id="restartBtn">もう一度遊ぶ</button></div></div>
+
+  <script>
+  (()=>{
+    "use strict";
+    const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+    const game={chips:1000,startChips:1000,bet:50,running:false,ended:false,screen:"lobby",sound:true,audio:null,master:null,musicTimer:null};
+    const speech=$("#speech"), chipsEl=$("#chips");
+    const dealerPanel=$("#dealerPanel"),dealerImages={neutral:"assets/dark-casino-dealer.png",win:"assets/dark-casino-dealer-win.png",lose:"assets/dark-casino-dealer-lose.png"};
+    Object.values(dealerImages).forEach(src=>{const img=new Image();img.src=src});
+    function dealerMood(mode="neutral"){const src=dealerImages[mode]||dealerImages.neutral;dealerPanel.style.backgroundImage=`linear-gradient(to top,#1b131d 0 30%,#120c1480 58%,transparent 86%),url("${src}")`}
+    function say(text,mode){speech.textContent=text;if(mode)dealerMood(mode)}
+    function roundChips(value){return Math.floor(value/10)*10}
+    function updateHud(){chipsEl.textContent=roundChips(game.chips).toLocaleString("ja-JP")}
+    function randomInt(max){if(window.crypto?.getRandomValues){const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%max}return Math.floor(Math.random()*max)}
+    async function ensureAudio(){
+      const AC=window.AudioContext||window.webkitAudioContext;
+      if(!AC){game.sound=false;$("#soundBtn").textContent="×";$("#soundBtn").disabled=true;return false}
+      if(!game.audio){
+        game.audio=new AC();game.master=game.audio.createGain();const limiter=game.audio.createDynamicsCompressor();
+        game.master.gain.value=.95;limiter.threshold.value=-8;limiter.knee.value=8;limiter.ratio.value=8;
+        game.master.connect(limiter).connect(game.audio.destination);
+      }
+      if(game.audio.state!=="running")try{await game.audio.resume()}catch(e){return false}
+      return game.audio.state==="running";
+    }
+    async function tone(freq=440,duration=.08,type="sine",volume=.09,delay=0){
+      if(!game.sound||!await ensureAudio())return;const now=game.audio.currentTime+delay,o=game.audio.createOscillator(),g=game.audio.createGain();
+      o.type=type;o.frequency.setValueAtTime(freq,now);g.gain.setValueAtTime(Math.max(.0001,volume),now);g.gain.exponentialRampToValueAtTime(.0001,now+duration);
+      o.connect(g).connect(game.master);o.start(now);o.stop(now+duration+.03);
+    }
+    function ambientPulse(){const notes=[220,261.63,293.66,196],i=Math.floor(Date.now()/1800)%notes.length;tone(notes[i],1.65,"sine",.11);tone(notes[(i+2)%notes.length],1.1,"triangle",.05,.08)}
+    async function startMusic(){if(!game.sound||game.musicTimer)return;if(!await ensureAudio())return;ambientPulse();game.musicTimer=setInterval(ambientPulse,1800)}
+    function stopMusic(){clearInterval(game.musicTimer);game.musicTimer=null}
+    $("#soundBtn").onclick=async()=>{game.sound=!game.sound;if(game.sound){const ok=await ensureAudio();if(!ok){game.sound=false;say("このブラウザでは音声を開始できませんでした。","lose")}else{tone(660,.16,"triangle",.12);startMusic();say("サウンドをオンにしました。","neutral")}}else{stopMusic();say("サウンドをオフにしました。","neutral")}$("#soundBtn").textContent=game.sound?"♪":"×";$("#soundBtn").setAttribute("aria-pressed",String(game.sound))};
+    document.addEventListener("visibilitychange",async()=>{if(!document.hidden&&game.sound){await ensureAudio();startMusic()}});
+    function setScreen(id){$$('.screen').forEach(x=>x.classList.toggle('active',x.id===id));game.screen=id;dealerMood("neutral");if(id==="lobby")say("お好きなゲームへどうぞ。");if(id==="blackjack")say("21を超えないように。引き際も勝負のうちです。");if(id==="roulette")say("複数の場所へチップを置けます。賭けすぎにはご注意を。");if(id==="slots")say("3つのリールに運を託してみませんか？")}
+    $$('[data-open]').forEach(b=>b.onclick=()=>setScreen(b.dataset.open));$$('.back').forEach(b=>b.onclick=()=>setScreen('lobby'));
+    $$('[data-bet-group] .chip').forEach(b=>b.onclick=()=>{$$('[data-bet-group] .chip').forEach(x=>x.classList.remove('active'));$$(`[data-bet="${b.dataset.bet}"]`).forEach(x=>x.classList.add('active'));game.bet=Number(b.dataset.bet);tone(520,.05,"triangle",.035)});
+    function canBet(){if(game.ended)return false;if(game.chips<game.bet){say("そのBETに必要なチップが足りません。小さいBETを選んでください。");tone(120,.2,"sawtooth",.04);return false}return true}
+
+    const suits=["♠","♥","♦","♣"], ranks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+    let bjPendingBet=0;
+    let bj={deck:[],player:[],dealer:[],active:false,hidden:true,bet:0,renderedPlayer:0,renderedDealer:0};
+    function freshDeck(){const d=[];for(const suit of suits)for(const rank of ranks)d.push({suit,rank});for(let i=d.length-1;i>0;i--){const j=randomInt(i+1);[d[i],d[j]]=[d[j],d[i]]}return d}
+    function handValue(hand){let v=0,aces=0;hand.forEach(c=>{if(c.rank==="A"){v+=11;aces++}else v+=Math.min(10,Number(c.rank)||10)});while(v>21&&aces){v-=10;aces--}return v}
+    function cardHTML(c,back=false,animate=false,delay=0){const cls=`card ${back?"back-card":""} ${!back&&(c.suit==="♥"||c.suit==="♦")?"red":""} ${animate?"deal":""}`;const style=animate?` style="animation-delay:${delay}ms"`:"";if(back)return `<div class="${cls}"${style} aria-label="伏せ札"></div>`;return `<div class="${cls}"${style} aria-label="${c.rank}${c.suit}">${c.rank}<span class="suit">${c.suit}</span></div>`}
+    function dealSounds(count){for(let i=0;i<count;i++)setTimeout(()=>tone(360+i*45,.09,"triangle",.11),i*110)}
+    function renderBjBet(){$("#bjBetTotal").textContent=bjPendingBet.toLocaleString();$$('[data-bj-add]').forEach(b=>b.disabled=bj.active);$("#clearBjBetBtn").disabled=bj.active||bjPendingBet===0}
+    function renderBJ(){const oldP=bj.renderedPlayer,oldD=bj.renderedDealer;$("#playerCards").innerHTML=bj.player.map((c,i)=>cardHTML(c,false,i>=oldP,(i-oldP)*100)).join("");$("#dealerCards").innerHTML=bj.dealer.map((c,i)=>cardHTML(c,bj.hidden&&i===1,i>=oldD,(i-oldD)*100)).join("");bj.renderedPlayer=bj.player.length;bj.renderedDealer=bj.dealer.length;$("#playerScore").textContent=bj.player.length?`合計 ${handValue(bj.player)}`:"";$("#dealerScore").textContent=bj.dealer.length?(bj.hidden?`表示 ${handValue([bj.dealer[0]])}`:`合計 ${handValue(bj.dealer)}`):"";$("#dealBtn").disabled=bj.active;$("#hitBtn").disabled=!bj.active;$("#standBtn").disabled=!bj.active;$("#doubleBtn").disabled=!(bj.active&&bj.player.length===2&&game.chips>=bj.bet);renderBjBet()}
+    $$('[data-bj-add]').forEach(b=>b.onclick=()=>{if(bj.active)return;const add=Number(b.dataset.bjAdd);if(bjPendingBet+add>game.chips){say("所持チップを超えるBETは置けません。","lose");tone(140,.2,"sawtooth",.1);return}bjPendingBet+=add;renderBjBet();tone(560,.07,"triangle",.11)});
+    $("#clearBjBetBtn").onclick=()=>{if(bj.active)return;bjPendingBet=0;renderBjBet();tone(300,.07,"triangle",.08)};
+    function lockBjActions(){$("#hitBtn").disabled=true;$("#standBtn").disabled=true;$("#doubleBtn").disabled=true}
+    function startBJ(){if(bj.active)return;if(bjPendingBet<=0){$("#bjMessage").textContent="チップを1枚以上BETしてください。";tone(140,.2,"sawtooth",.1);return}if(game.chips<bjPendingBet){$("#bjMessage").textContent="そのBETに必要なチップが足りません。";return}game.chips-=bjPendingBet;bj={deck:freshDeck(),player:[],dealer:[],active:true,hidden:true,bet:bjPendingBet,renderedPlayer:0,renderedDealer:0};bj.player.push(bj.deck.pop(),bj.deck.pop());bj.dealer.push(bj.deck.pop(),bj.deck.pop());updateHud();renderBJ();dealSounds(4);const pv=handValue(bj.player),dv=handValue(bj.dealer);if(pv===21||dv===21){lockBjActions();setTimeout(()=>finishBJ("natural"),460)}else $("#bjMessage").textContent="ヒット、スタンド、またはダブルダウンを選んでください。"}
+    function finishBJ(reason){if(!bj.active)return;bj.active=false;bj.hidden=false;let p=handValue(bj.player),d=handValue(bj.dealer);const oldDealerCount=bj.dealer.length;if(reason==="stand"||(reason==="hit"&&p<=21))while(d<17){bj.dealer.push(bj.deck.pop());d=handValue(bj.dealer)}const drawn=bj.dealer.length-oldDealerCount;if(drawn)dealSounds(drawn);let payout=0,msg="";const pBJ=bj.player.length===2&&p===21,dBJ=bj.dealer.length===2&&d===21;if(p>21){msg="バスト。ディーラーの勝ちです。"}else if(dBJ&&pBJ){payout=bj.bet;msg="両者ブラックジャック。引き分けです。"}else if(pBJ){payout=bj.bet*2.5;msg="ブラックジャック！ 3:2の配当です。"}else if(dBJ){msg="ディーラーのブラックジャック。"}else if(d>21||p>d){payout=bj.bet*2;msg=d>21?"ディーラーがバスト。あなたの勝ちです！":"あなたの勝ちです！"}else if(p===d){payout=bj.bet;msg="プッシュ。BETを返却します。"}else{msg="ディーラーの勝ちです。"}payout=roundChips(payout);game.chips+=payout;$("#bjMessage").textContent=msg;say(msg,payout>bj.bet?"win":payout===bj.bet?"neutral":"lose");tone(payout>bj.bet?660:payout===bj.bet?380:150,.3,payout>bj.bet?"triangle":"sawtooth",.1);updateHud();renderBJ();checkBankrupt()}
+    $("#dealBtn").onclick=startBJ;
+    $("#hitBtn").onclick=()=>{if(!bj.active)return;bj.player.push(bj.deck.pop());dealSounds(1);renderBJ();if(handValue(bj.player)>=21){lockBjActions();setTimeout(()=>finishBJ("hit"),380)}};
+    $("#standBtn").onclick=()=>finishBJ("stand");
+    $("#doubleBtn").onclick=()=>{if(!bj.active||bj.player.length!==2)return;if(game.chips<bj.bet){$("#bjMessage").textContent="ダブルダウンに必要な追加チップが足りません。";return}game.chips-=bj.bet;bj.bet*=2;bj.player.push(bj.deck.pop());updateHud();dealSounds(1);renderBJ();lockBjActions();$("#bjMessage").textContent=`BETを${bj.bet.toLocaleString()}枚へ倍増し、1枚引いてスタンドします。`;setTimeout(()=>finishBJ(handValue(bj.player)>21?"hit":"stand"),420)};
+    renderBjBet();renderBJ();
+
+    const reds=new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
+    const wheelOrder=[0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
+    const wheelCanvas=$("#wheelCanvas"),wctx=wheelCanvas.getContext("2d"),segmentDeg=360/wheelOrder.length;
+    let spinning=false,spinTurns=0,rouletteBets=new Map();
+    function numberColor(n){return n===0?"green":reds.has(n)?"red":"black"}
+    function drawWheel(){
+      const W=wheelCanvas.width,C=W/2,R=W*.47,a=Math.PI*2/wheelOrder.length;wctx.clearRect(0,0,W,W);
+      wheelOrder.forEach((n,i)=>{const mid=-Math.PI/2+i*a,start=mid-a/2,end=mid+a/2;wctx.beginPath();wctx.moveTo(C,C);wctx.arc(C,C,R,start,end);wctx.closePath();wctx.fillStyle=n===0?"#176044":reds.has(n)?"#8f1830":"#15151a";wctx.fill();wctx.strokeStyle="#d5ab61";wctx.lineWidth=2;wctx.stroke();wctx.save();wctx.translate(C,C);wctx.rotate(mid+Math.PI/2);wctx.fillStyle="#fff4d2";wctx.font="bold 22px Georgia";wctx.textAlign="center";wctx.textBaseline="middle";wctx.fillText(String(n),0,-R*.82);wctx.restore()});
+      wctx.beginPath();wctx.arc(C,C,R,0,Math.PI*2);wctx.strokeStyle="#d7ae65";wctx.lineWidth=12;wctx.stroke();
+    }
+    function totalRouletteBet(){return [...rouletteBets.values()].reduce((a,b)=>a+b,0)}
+    function renderRouletteBets(){
+      $$('[data-bet-key]').forEach(el=>{const amount=rouletteBets.get(el.dataset.betKey)||0;el.classList.toggle("has-bet",amount>0);el.querySelector(".bet-amount")?.remove();if(amount){const s=document.createElement("span");s.className="bet-amount";s.textContent=amount;el.appendChild(s)}});
+      $("#rouletteTotal").textContent=totalRouletteBet().toLocaleString();
+    }
+    function addRouletteBet(key){if(spinning||game.ended)return;const next=totalRouletteBet()+game.bet;if(next>game.chips){say("所持チップを超えるBETは置けません。","lose");tone(140,.2,"sawtooth",.1);return}rouletteBets.set(key,(rouletteBets.get(key)||0)+game.bet);renderRouletteBets();tone(560,.08,"triangle",.1)}
+    const zero=document.createElement("button");zero.className="number-cell green";zero.dataset.betKey="n:0";zero.textContent="0";$("#numberGrid").appendChild(zero);
+    for(let n=1;n<=36;n++){const b=document.createElement("button");b.className=`number-cell ${numberColor(n)}`;b.dataset.betKey=`n:${n}`;b.textContent=n;$("#numberGrid").appendChild(b)}
+    $$('[data-bet-key]').forEach(b=>b.onclick=()=>addRouletteBet(b.dataset.betKey));
+    $("#clearBetsBtn").onclick=()=>{if(spinning)return;rouletteBets.clear();renderRouletteBets();tone(300,.07,"triangle",.08)};
+    function betWins(key,n){if(key.startsWith("n:"))return n===Number(key.slice(2));if(n===0)return false;if(key==="red")return reds.has(n);if(key==="black")return !reds.has(n);if(key==="odd")return n%2===1;if(key==="even")return n%2===0;if(key==="low")return n<=18;if(key==="high")return n>=19;return false}
+    function spin(){
+      if(spinning||game.ended)return;const total=totalRouletteBet();if(!total){$("#rouletteMessage").textContent="少なくとも1か所にBETを置いてください。";tone(140,.2,"sawtooth",.1);return}if(total>game.chips){$("#rouletteMessage").textContent="合計BETが所持チップを超えています。";return}
+      const placed=[...rouletteBets.entries()];game.chips-=total;updateHud();spinning=true;$("#spinBtn").disabled=true;$("#clearBetsBtn").disabled=true;$("#rouletteResult").textContent="…";$("#rouletteMessage").textContent="ホイール回転中…";
+      const index=randomInt(wheelOrder.length),n=wheelOrder[index];spinTurns+=5+randomInt(3);wheelCanvas.style.transform=`rotate(${spinTurns*360-index*segmentDeg}deg)`;tone(190,.24,"triangle",.1);
+      setTimeout(()=>{let payout=0,wins=0;placed.forEach(([key,amount])=>{if(betWins(key,n)){payout+=amount*(key.startsWith("n:")?36:2);wins++}});payout=roundChips(payout);game.chips+=payout;spinning=false;rouletteBets.clear();renderRouletteBets();$("#spinBtn").disabled=game.ended;$("#clearBetsBtn").disabled=false;const color=numberColor(n)==="green"?"緑":numberColor(n)==="red"?"赤":"黒";$("#rouletteResult").textContent=`${n} ${color}`;const msg=wins?`${wins}か所的中！ ${payout.toLocaleString()}枚を獲得しました。`:"残念、今回は外れです。";$("#rouletteMessage").textContent=msg;say(msg,wins?"win":"lose");tone(wins?760:140,wins ? .48 : .32,wins?"triangle":"sawtooth",.12);updateHud();checkBankrupt()},2900);
+    }
+    drawWheel();renderRouletteBets();$("#spinBtn").onclick=spin;
+
+    const slotSymbols=[
+      {html:"7",name:"セブン",pay:6},
+      {html:'<span class="bar">BAR</span>',name:"BAR",pay:3},
+      {html:"♦",name:"ダイヤ",pay:2},
+      {html:"🔔",name:"ベル",pay:1.5},
+      {html:"🍒",name:"チェリー",pay:1}
+    ];
+    const slotLines=[
+      [0,0,0],[1,1,1],[2,2,2],
+      [0,1,2],[2,1,0],
+      [0,1,0],[2,1,2],
+      [1,0,1],[1,2,1]
+    ];
+    const lineColors=["#ffe08a","#61e6ff","#ff7196","#9eff80","#c893ff","#ff9f5a","#66a3ff","#f6ff69","#ff72e8"];
+    let slotSpinning=false;
+    function randomSlotColumn(){return [randomInt(slotSymbols.length),randomInt(slotSymbols.length),randomInt(slotSymbols.length)]}
+    function showSlotColumn(column,values){for(let row=0;row<3;row++)$("#slot-"+row+"-"+column).innerHTML=slotSymbols[values[row]].html}
+    function clearSlotWins(){$$('.slot-cell').forEach(c=>c.classList.remove("win"));$("#paylineOverlay").innerHTML=""}
+    function showWinningLines(wins){
+      const svg=$("#paylineOverlay");clearSlotWins();
+      wins.forEach((win,i)=>{const rows=slotLines[win.line];for(let col=0;col<3;col++)$("#slot-"+rows[col]+"-"+col).classList.add("win");const line=document.createElementNS("http://www.w3.org/2000/svg","polyline");line.setAttribute("points",rows.map((row,col)=>`${50+col*100},${50+row*100}`).join(" "));line.setAttribute("stroke",lineColors[i%lineColors.length]);svg.appendChild(line)});
+    }
+    function spinSlots(){
+      if(slotSpinning||game.ended)return;
+      if(game.chips<game.bet){$("#slotMessage").textContent="そのBETに必要なチップが足りません。";say("BETを下げてください。","lose");tone(140,.2,"sawtooth",.1);return}
+      const wager=game.bet,finals=Array.from({length:3},()=>randomSlotColumn()),stopped=[false,false,false];
+      clearSlotWins();game.chips-=wager;updateHud();slotSpinning=true;dealerMood("neutral");$("#slotSpinBtn").disabled=true;$("#slotMessage").textContent="9ライン抽選中…";$$('.reel-column').forEach(r=>r.classList.add("spinning"));
+      const ticker=setInterval(()=>{for(let col=0;col<3;col++)if(!stopped[col])showSlotColumn(col,randomSlotColumn());tone(240+randomInt(90),.025,"square",.025)},80);
+      for(let col=0;col<3;col++)setTimeout(()=>{stopped[col]=true;showSlotColumn(col,[finals[0][col],finals[1][col],finals[2][col]]);$("#reel"+col).classList.remove("spinning");tone(430+col*100,.13,"triangle",.11)},850+col*350);
+      setTimeout(()=>{
+        clearInterval(ticker);const wins=[];
+        slotLines.forEach((rows,line)=>{const values=rows.map((row,col)=>finals[row][col]);if(values[0]===values[1]&&values[1]===values[2])wins.push({line,symbol:values[0],mult:slotSymbols[values[0]].pay})});
+        const totalMult=wins.reduce((sum,win)=>sum+win.mult,0),payout=roundChips(wager*totalMult);game.chips+=payout;slotSpinning=false;$("#slotSpinBtn").disabled=game.ended;if(wins.length)showWinningLines(wins);
+        const msg=wins.length?`${wins.length}ライン的中！ 合計${payout.toLocaleString()}枚を獲得。`:"残念、今回は揃いませんでした。";
+        $("#slotMessage").textContent=msg;say(msg,payout>wager?"win":payout?"neutral":"lose");tone(payout?780:140,payout ? .55 : .3,payout?"triangle":"sawtooth",.12);updateHud();checkBankrupt();
+      },1750);
+    }
+    $("#slotSpinBtn").onclick=spinSlots;
+
+    function checkBankrupt(){if(game.chips<50&&!bj.active&&!spinning&&!slotSpinning){say("使用できるチップが尽きました。今回はここまでですね。","lose");endGame(true)}}
+    function endGame(early=false){if(game.ended)return;game.ended=true;game.running=false;bj.active=false;$("#hitBtn").disabled=true;$("#standBtn").disabled=true;$("#doubleBtn").disabled=true;$("#dealBtn").disabled=true;$("#spinBtn").disabled=true;$("#slotSpinBtn").disabled=true;const diff=game.chips-game.startChips;dealerMood(diff>0?"win":diff<0?"lose":"neutral");const fmt=n=>roundChips(n).toLocaleString("ja-JP");$("#finalScore").textContent=`${fmt(game.chips)} CHIPS`;$("#finalMessage").textContent=diff>0?`開始時より${fmt(diff)}枚増えました。見事な勝負でした。`:diff===0?"開始時と同じ枚数です。堅実な夜でした。":`開始時より${fmt(Math.abs(diff))}枚減りました。次の夜に取り返しましょう。`;$("#endOverlay").classList.add("show");tone(diff>0?660:180,.8,"triangle",.11)}
+    $("#startBtn").onclick=async()=>{const audioReady=await ensureAudio();$("#startOverlay").classList.remove("show");game.running=true;if(audioReady&&game.sound){tone(660,.18,"triangle",.12);startMusic()}else{$("#soundBtn").textContent="×";game.sound=false;say("音声を開始できませんでした。右上の音声ボタンから再試行できます。","lose")}if(audioReady)say("ゲーム開始です。さて、どのゲームで遊ばれますか？","neutral")};
+    $("#restartBtn").onclick=()=>location.reload();
+    updateHud();
+  })();
+  </script>
+</body>
+</html>
